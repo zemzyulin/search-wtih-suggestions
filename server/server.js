@@ -1,8 +1,8 @@
-const express = require('express');
-require('dotenv').config();
-const bodyParser = require('body-parser');
-const createError = require('http-errors');
-const logger = require('morgan');
+import express from 'express';
+import _ from './env.js';
+import bodyParser from 'body-parser';
+import createError from 'http-errors';
+import logger from 'morgan';
 
 
 const app = express();
@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logger('dev'));
 
-const searchRoutes = require('./routes/search-routes');
+import searchRoutes from './routes/search-routes.js';    
 app.use('/api/search', searchRoutes);
 
 
@@ -27,8 +27,7 @@ app.use(function(err, req, res) {
   res.status(err.status || 500);
 });
 
-
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}.`);
-})
+})  

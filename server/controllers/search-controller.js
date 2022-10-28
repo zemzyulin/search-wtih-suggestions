@@ -1,10 +1,11 @@
-const pool = require('../models/database');
-const { capitalizeString, concatUnique } = require('../utils/utils');
+import pool from '../models/database.js';
+import { capitalizeString, concatUnique } from '../utils/utils.js';
 
 // list 10 suggestions
-exports.find = async (req, res) => {
+export async function find(req, res) {
     try {
         // query for start of city name match
+
         let query1 = `SELECT * FROM cities WHERE name LIKE $1 ORDER BY name LIMIT 10`
         let value1 = capitalizeString(req.query.search);
         let result1 = await pool.query(query1, [`${value1}%`]);
@@ -24,7 +25,7 @@ exports.find = async (req, res) => {
 }
 
 // find all matches
-exports.findAll = async (req, res) => {
+export async function findAll(req, res) {
     try {
         // query for exact match and start of city name match
         let query1 = `SELECT * FROM cities WHERE name = $1 OR name = $2 OR name LIKE $2 ORDER BY name`;

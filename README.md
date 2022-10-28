@@ -1,7 +1,7 @@
 ## Search with suggestions
 
 ### Short description
-__Project Title:__ Search with suggestions
+__Project Title:__ Search with suggestions  
 __Description:__ A search component that provides user with suggestions during input and retrieves all data upon search.
 Component fetches data from PostgreSQL database via NodeJS server. User interface is built on React and utilizes lodash.debounce and mark.js for better UI/UX.
 
@@ -22,7 +22,7 @@ __Technology: JavaScript, Node.js, Express, PostgreSQL, React, Lodash.debounce, 
 
 ### How to run locally
 __Setup PostgreSQL Database__
-Install project dependencies using `npm install` in `/`  
+Install project dependencies using `npm install` in `/server`  
 Install project dependencies using `npm install` in `/client`
 
 Create PostgreSQL database and populate database with data
@@ -42,8 +42,8 @@ DB_DATABASE=cities_search
 PORT=8000
 ```
 
-Run `npm start` in `/`  
-Run `npm start` in `client`
+Run `npm start` in `/server`  
+Run `npm start` in `/client`
 
 
 <br>
