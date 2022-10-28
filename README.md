@@ -15,14 +15,14 @@ Component fetches data from PostgreSQL database via NodeJS server. User interfac
 7. Data is accessed via requests to NodeJS (Express) server.
 8. All request have basic validation.
 
-__Technology: JavaScript, Node.js, Express, PostgreSQL, React, Lodash.debounce, Mark.js, Heroku__
+__Technology: JavaScript, Node.js, Express, PostgreSQL, React, Lodash.debounce, Mark.js__
 
 <br>
 <br>
 
 ### How to run locally
 __Setup PostgreSQL Database__
-Install project dependencies using `npm install` in `/`
+Install project dependencies using `npm install` in `/`  
 Install project dependencies using `npm install` in `/client`
 
 Create PostgreSQL database and populate database with data
@@ -42,7 +42,7 @@ DB_DATABASE=cities_search
 PORT=8000
 ```
 
-Run `npm start` in `/`
+Run `npm start` in `/`  
 Run `npm start` in `client`
 
 
