@@ -1,0 +1,27 @@
+{
+  "name": "search-suggestions",
+  "version": "1.0.0",
+  "description": "simple search with suggestions (Postgres + Express + React + NodeJS)",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "postgresql",
+    "express",
+    "react",
+    "nodejs",
+    "rest",
+    "api"
+  ],
+  "author": "Yehor Zemzyulin",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "http-errors": "^2.0.0",
+    "morgan": "^1.10.0",
+    "pg": "^8.8.0"
+  }
+}

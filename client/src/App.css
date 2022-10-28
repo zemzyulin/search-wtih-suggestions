@@ -1,0 +1,41 @@
+.top-container {
+  margin-top: 30px;
+}
+
+.dropdown {
+  height: 240px;
+}
+
+.dropdown.invisible {
+  opacity: 0;
+}
+
+.dropdown-row:hover {
+  background-color: lightgrey;
+}
+
+.empty {
+  height: 240px;
+}
+
+.searchResults.invisible {
+  display: none;
+}
+
+mark {
+  font-weight: bold;
+  background-color: transparent;
+  padding: 0px;
+}
+
+.flex-row {
+  max-width: 600px;
+}
+
+.flex-column {
+  max-width: 600px;
+}
+
+hr {
+  max-width: 600px;
+}
