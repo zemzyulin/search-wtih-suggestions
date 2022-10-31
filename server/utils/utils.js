@@ -24,3 +24,13 @@ export function concatUnique(array1, array2) {
     });
     return array1.concat(filteredArray);
 }
+
+// validate for full-text search
+export function fullTextValidation(input) {
+    // exclude non-alphabetic and concat in one valid tsquery string
+    return input.split(' ')
+                .map(el => el.replace(/\W/g, ''))
+                .filter(el => el !== '')
+                .map(el => el + ':*')
+                .join(' & ');
+}
