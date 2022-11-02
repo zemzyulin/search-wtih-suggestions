@@ -9,7 +9,7 @@ function App() {
   const [open, setOpen] = useState(false);
   const [searchOutput, setSearchOutput] = useState([]);
   const [openOutput, setOpenOutput] = useState(false);
-  const [fullText, setFullText] = useState(false);
+  const [fullText, setFullText] = useState(true);
   
   // setup debounce
   const debounceFn = useCallback(debounce(fetchSuggestions, 300), []);
@@ -136,8 +136,9 @@ function App() {
           name="inlineRadioOptions"
           id="inlineRadio1"
           value="option1"
-          onChange={() => setFullText(false)} />
-        <label className="form-check-label" for="inlineRadio1">Simple SQL search</label>
+          checked
+          onChange={() => setFullText(true)} />
+        <label className="form-check-label" for="inlineRadio1">Fulltext SQL search</label>
       </div>
       <div className="form-check form-check-inline">
         <input 
@@ -146,8 +147,8 @@ function App() {
           name="inlineRadioOptions"
           id="inlineRadio2"
           value="option2"
-          onChange={() => setFullText(true)} />
-        <label className="form-check-label" for="inlineRadio2">Fulltext SQL search</label>
+          onChange={() => setFullText(false)} />
+        <label className="form-check-label" for="inlineRadio2">Simple SQL search</label>
       </div>
       </div>
       <div className="container-sm">
