@@ -9,20 +9,27 @@ function App() {
   const [open, setOpen] = useState(false);
   const [searchOutput, setSearchOutput] = useState([]);
   const [openOutput, setOpenOutput] = useState(false);
-  const [fullText, setFullText] = useState(true);
+  const [searchType, setSearchType] = useState('fulltext');
   
   // setup debounce
   const debounceFn = useCallback(debounce(fetchSuggestions, 300), []);
   const debounceFnFullText = useCallback(debounce(fetchSuggestionsFullText, 300), []);
+  const debounceFnFuzzy = useCallback(debounce(fetchSuggestionsFuzzyText, 300), []);
 
   // handle input change
   async function onChange(e) {
     setInput(e.target.value);
     setOpen(true);
-    !fullText ? debounceFn(e.target.value) : debounceFnFullText(e.target.value);
+    if (searchType === 'fulltext') {
+      debounceFnFullText(e.target.value);
+    } else if (searchType === 'fuzzy') {
+      debounceFnFuzzy(e.target.value);
+    } else {
+      debounceFn(e.target.value);
+    }
   }
 
-  // call to api to get suggestions
+  // call to api to get suggestions (SIMPLE SEARCH)
   function fetchSuggestions(input) {
     fetch(`/api/search/suggestions?search=${input}`)
       .then((res) => res.json())
@@ -41,9 +48,28 @@ function App() {
       )
   }
 
-  // call to api to get suggestions
+  // call to api to get suggestions (FULL TEXT SEARCH)
   function fetchSuggestionsFullText(input) {
     fetch(`/api/search/fulltext/suggestions?search=${input}`)
+      .then((res) => res.json())
+      .then(
+        (res) => {
+          setData([]);
+          if (Object.keys(res).length !== 0) {
+            res.forEach(el => {
+              setData((prev) => [...prev, el])
+            })
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      )
+  }
+
+  // call to api to get suggestions (FUZZY SEARCH)
+  function fetchSuggestionsFuzzyText(input) {
+    fetch(`/api/search/fuzzy/suggestions?search=${input}`)
       .then((res) => res.json())
       .then(
         (res) => {
@@ -69,12 +95,29 @@ function App() {
   // handle Enter pressed on input
   function handleEnter(e) {
     if (e.key === 'Enter') {
-      !fullText ? handleSearch(input) : handleSearchFullText(input);
+      if (searchType === 'fulltext') {
+        handleSearchFullText(input);
+      } else if (searchType === 'fuzzy') {
+        handleSearchFuzzy(input);
+      } else {
+        handleSearchSimple(input);
+      }
     }
   }
 
-  // call to api to get full search results
-  function handleSearch(input) {
+  // handle Search button pressed
+  function handleSearchButton(e) {
+    if (searchType === 'fulltext') {
+      handleSearchFullText(input);
+    } else if (searchType === 'fuzzy') {
+      handleSearchFuzzy(input);
+    } else {
+      handleSearchSimple(input);
+    }
+  }
+
+  // call to api to get search results (SIMPLE SEARCH)
+  function handleSearchSimple(input) {
     if (input) {
       fetch(`/api/search?search=${input}`)
           .then((res) => res.json())
@@ -93,9 +136,30 @@ function App() {
     setInput('');
   }
 
+  // call to api to get search results (FULL TEXT SEARCH)
   function handleSearchFullText(input) {
     if (input) {
       fetch(`/api/search/fulltext/?search=${input}`)
+          .then((res) => res.json())
+          .then(
+            (result) => {
+              setSearchOutput(result);
+              setOpenOutput(true);
+            },
+            (error) => {
+              console.log(error);
+            }
+          )
+    } else {
+      setOpenOutput(false);
+    }
+    setInput('');
+  }
+
+  // call to api to get search results (FUZZY SEARCH)
+  function handleSearchFuzzy(input) {
+    if (input) {
+      fetch(`/api/search/fuzzy/?search=${input}`)
           .then((res) => res.json())
           .then(
             (result) => {
@@ -125,37 +189,53 @@ function App() {
     instance.mark(term);
   };
 
+  function handleRadio(event) {
+    setSearchType(event.target.value);
+  }
+
   return (
     <div className="container-sm">
       <div className="container-sm top-container"><h3>Search with suggestions</h3></div>
       <div className="container-sm">
-      <div className="form-check form-check-inline">
-        <input
-          className="form-check-input"
-          type="radio"
-          name="inlineRadioOptions"
-          id="inlineRadio1"
-          value="option1"
-          checked
-          onChange={() => setFullText(true)} />
-        <label className="form-check-label" for="inlineRadio1">Fulltext SQL search</label>
-      </div>
-      <div className="form-check form-check-inline">
-        <input 
-          className="form-check-input"
-          type="radio"
-          name="inlineRadioOptions"
-          id="inlineRadio2"
-          value="option2"
-          onChange={() => setFullText(false)} />
-        <label className="form-check-label" for="inlineRadio2">Simple SQL search</label>
-      </div>
+        <div className="form-check form-check-inline">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="inlineRadioOptions"
+            id="inlineRadio1"
+            value="fulltext"
+            checked={searchType === 'fulltext'}
+            onChange={handleRadio} />
+          <label className="form-check-label" htmlFor="inlineRadio1">Fulltext SQL search</label>
+        </div>
+        <div className="form-check form-check-inline">
+          <input 
+            className="form-check-input"
+            type="radio"
+            name="inlineRadioOptions"
+            id="inlineRadio2"
+            value="fuzzy"
+            checked={searchType === 'fuzzy'}
+            onChange={handleRadio} />
+          <label className="form-check-label" htmlFor="inlineRadio2">Fuzzy Fulltext SQL Search</label>
+        </div>
+        <div className="form-check form-check-inline">
+          <input 
+            className="form-check-input"
+            type="radio"
+            name="inlineRadioOptions"
+            id="inlineRadio3"
+            value="simple"
+            checked={searchType === 'simple'}
+            onChange={handleRadio} />
+          <label className="form-check-label" htmlFor="inlineRadio3">Simple SQL search</label>
+        </div>
       </div>
       <div className="container-sm">
         
         <div className="d-flex flex-row mb-3">
           <input type="text" value={input} onChange={onChange} onKeyDown={handleEnter} className="form-control"/>
-          <button onClick={() => handleSearchFullText(input)} className="btn btn-primary">
+          <button onClick={handleSearchButton} className="btn btn-primary">
               Search
           </button>
         </div>
